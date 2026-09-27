@@ -1675,6 +1675,12 @@ function renderImportPlan(plan) {
             .map((i) => `<li data-issue="${i.code}">${escapeHtml(i.message)}</li>`)
             .join('')}</ul>`
         : '<span class="imp-ok">✅ 可导入</span>';
+      const dupNote =
+        r.duplicateFollowUps && r.duplicateFollowUps.length
+          ? `<div class="imp-dup-note" data-issue="duplicate-first">🔁 文件内首次出现：第 ${r.duplicateFollowUps
+              .map((n) => Number(n))
+              .join('、')} 数据行与此行口令等价（同演员、同区域、同整数秒时刻），将被判为重复</div>`
+          : '';
       return `<tr class="${r.valid ? 'imp-row-ok' : 'imp-row-err'}">
         <td>${r.seq}</td>
         <td>${escapeHtml(r.name || '（空）')}<span class="time-detail">${escapeHtml(r.role || '无角色')}</span>${
@@ -1686,7 +1692,7 @@ function renderImportPlan(plan) {
         <td>${timeCell}</td>
         <td>${dwellCell}</td>
         <td>${escapeHtml(r.note || '')}</td>
-        <td class="imp-issue-cell">${issues}</td>
+        <td class="imp-issue-cell">${issues}${dupNote}</td>
       </tr>`;
     })
     .join('');
